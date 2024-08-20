@@ -131,7 +131,8 @@ void y_p(nrs_t* nrs, double time, const int &nbID, const occa::memory &o_bID, co
   o_maxy.copyTo(tmp.data());
   const dfloat maxy = reduce_max(tmp, mesh->Nelements);
 
-  std::cout << std::scientific << "\n      y+ min: " << miny <<" max: "<< maxy <<" avg: "<< sumy/areaWall.at(0)<<"\n";
+  if(platform->comm.mpiRank == 0)
+    std::cout << std::scientific << "\n      y+ min: " << miny <<" max: "<< maxy <<" avg: "<< sumy/areaWall.at(0)<<"\n";
 
   if(iffld){
     int outXYZ = 0;
