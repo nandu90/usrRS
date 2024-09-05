@@ -108,14 +108,19 @@
 	      }
 	      
 	      const dlong idInterior = idM + istride;
+             const dfloat ywd = YWD[idInterior];
 
-	      const dfloat yplus = YWD[idInterior] * utau * rho / mue;
+             if(ywd > 1e-8) { //avoids GLL on wall corners
+               if(utau > 1e-8) { // S_ij = 0 at some GLL - possible bug in strainRate calc
+                 const dfloat yplus = ywd * utau * rho / mue;
 
-	      if(iffld) YP[idM] = yplus;
-	      
-	      s_min[t] = fmin(s_min[t], yplus);
-	      s_max[t] = fmax(s_max[t], yplus);
-	      s_sum[t] += yplus * sWJ;
+                 if(iffld) YP[idM] = yplus;
+
+                 s_min[t] = fmin(s_min[t], yplus);
+                 s_max[t] = fmax(s_max[t], yplus);
+                 s_sum[t] += yplus * sWJ;
+               }
+             }
             }
           }
         }
